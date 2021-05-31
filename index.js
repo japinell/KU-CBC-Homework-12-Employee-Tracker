@@ -2,6 +2,7 @@
 //  Library imports
 //
 const inquirer = require("inquirer");
+const mysql = require("mysql");
 //
 const { Department } = require("./lib/Department");
 const { Role } = require("./lib/Role");
@@ -31,7 +32,6 @@ const menuQuestions = [
     name: "action",
     message: "What would you like to do? ",
     choices: [
-      new inquirer.Separator(" *** Main Menu *** "),
       { value: "01", name: "Manage Departments" },
       { value: "02", name: "Manage Roles" },
       { value: "03", name: "Manage Employees" },
@@ -258,11 +258,23 @@ function promptStartQuestions() {
     //
     if (answers.continue) {
       //
-      promptMenuQuestions();
+      // Connect to the server/database
+      //
+      console.log("Connecting to the server...");
+      conn.connect((err) => {
+        //
+        if (err) throw err;
+        //
+        console.log("Connected!");
+        promptMenuQuestions();
+        //
+      });
+      //
       //
     }
     //
   });
+  //
 }
 //
 // Prompt for menu questions
@@ -290,6 +302,14 @@ function promptMenuQuestions() {
         // Manage employees
         //
         promptEmpQuestions();
+        break;
+      case "99":
+        //
+        // End the application and the server/database connection
+        //
+        console.log("Disconnecting from the server...");
+        conn.end();
+        console.log("Disconnected!");
         break;
       //
     }
@@ -354,6 +374,16 @@ function promptDeptQuestions() {
   });
   //
 }
+//
+// Set the connection to the MySql server/database
+//
+const conn = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "",
+  database: "cms_db",
+});
 //
 // Rock & Roll
 //
