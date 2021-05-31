@@ -369,7 +369,9 @@ function promptDeptQuestions() {
       //
     }
     //
-    console.log(answers);
+    // Go back to the main menu
+    //
+    promptMenuQuestions();
     //
   });
   //
