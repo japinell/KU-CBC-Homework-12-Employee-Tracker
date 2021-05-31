@@ -79,7 +79,7 @@ const deptQuestions = [
       return validateAlphaInput(answer);
     },
     when: function (answers) {
-      return ["D4", "D6", "D8"].indexOf(answers.action) >= 0;
+      return ["D1", "D4", "D6", "D8"].indexOf(answers.action) >= 0;
     },
   },
 ];
@@ -266,6 +266,7 @@ function promptStartQuestions() {
         if (err) throw err;
         //
         console.log("Connected!");
+        Department.prototype.conn = conn;
         promptMenuQuestions();
         //
       });
@@ -330,6 +331,8 @@ function promptDeptQuestions() {
         //
         // Create department
         //
+        const dept = new Department(answers.deptName);
+        dept.createDepartment();
         break;
       case "D2":
         //
