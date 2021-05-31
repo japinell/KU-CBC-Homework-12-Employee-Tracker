@@ -28,5 +28,6 @@ CREATE TABLE employees(
   INDEX role_idx (role_id),
   FOREIGN KEY (role_id) REFERENCES roles(id),
   INDEX manager_idx (manager_id),
+  FOREIGN KEY (manager_id) REFERENCES employees(id),
   PRIMARY KEY (id)
 );
