@@ -1,3 +1,6 @@
+--
+use cms_db;
+
 -- Departments
 INSERT INTO departments (name)
 VALUES ("Sales");

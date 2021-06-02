@@ -58,7 +58,7 @@ const deptQuestions = [
       { value: "D7", name: "Delete A Department By Id" },
       { value: "D8", name: "Delete A Department By Name" },
     ],
-    default: "D2",
+    default: "D8",
   },
   {
     type: "input",
@@ -80,6 +80,15 @@ const deptQuestions = [
     },
     when: function (answers) {
       return ["D1", "D4", "D6", "D8"].indexOf(answers.action) >= 0;
+    },
+  },
+  {
+    type: "confirm",
+    name: "confirm",
+    message:
+      "Deleting a department will also delete all the other data related to that department...\n Do you wish to continue? ",
+    when: function (answers) {
+      return ["D7", "D8"].indexOf(answers.action) >= 0;
     },
   },
 ];
@@ -332,7 +341,7 @@ function promptDeptQuestions() {
         // Create department
         //
         const dept = new Department(answers.deptName);
-        dept.createDepartment();
+        dept.insert();
         break;
       case "D2":
         //
@@ -363,11 +372,21 @@ function promptDeptQuestions() {
         //
         // Delete a department by id
         //
+        if (answers.confirm) {
+          //
+          Department.prototype.delete({ id: answers.deptId });
+          //
+        }
         break;
       case "D8":
         //
         // Delete a department by name
         //
+        if (answers.confirm) {
+          //
+          Department.prototype.delete({ name: answers.deptName });
+          //
+        }
         break;
       //
     }
