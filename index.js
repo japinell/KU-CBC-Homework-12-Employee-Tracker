@@ -340,8 +340,7 @@ function promptDeptQuestions() {
         //
         // Create department
         //
-        const dept = new Department(answers.deptName);
-        dept.insert();
+        new Department().insert({ deptName: answers.deptName });
         break;
       case "D2":
         //
@@ -374,7 +373,7 @@ function promptDeptQuestions() {
         //
         if (answers.confirm) {
           //
-          Department.prototype.delete({ id: answers.deptId });
+          new Department().delete({ id: answers.deptId });
           //
         }
         break;
