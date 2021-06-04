@@ -49,20 +49,20 @@ const deptQuestions = [
     name: "action",
     message: "--- Manage Departments ---",
     choices: [
-      { value: "D1", name: "Create A Department" },
-      { value: "D2", name: "Retrieve All Departments" },
-      { value: "D3", name: "Retrieve A Department By Id" },
-      { value: "D4", name: "Retrieve A Department By Name" },
-      { value: "D5", name: "Update A Department By Id" },
-      { value: "D6", name: "Update A Department By Name" },
-      { value: "D7", name: "Delete A Department By Id" },
-      { value: "D8", name: "Delete A Department By Name" },
+      { value: "D1", name: "Add Department" },
+      { value: "D2", name: "Vie All Departments" },
+      { value: "D3", name: "View a Department By Id" },
+      { value: "D4", name: "View a Department By Name" },
+      { value: "D5", name: "Update a Department By Id" },
+      { value: "D6", name: "Update a Department By Name" },
+      { value: "D7", name: "Delete a Department By Id" },
+      { value: "D8", name: "Delete a Department By Name" },
     ],
-    default: "D8",
+    default: "D3",
   },
   {
     type: "input",
-    name: "deptId",
+    name: "id",
     message: "What's the department id? ",
     validate: (answer) => {
       return validateNumericInput(answer);
@@ -73,7 +73,7 @@ const deptQuestions = [
   },
   {
     type: "input",
-    name: "deptName",
+    name: "name",
     message: "What's the department name? ",
     validate: (answer) => {
       return validateAlphaInput(answer);
@@ -83,10 +83,21 @@ const deptQuestions = [
     },
   },
   {
+    type: "input",
+    name: "deptNewName",
+    message: "What's the department new name? ",
+    validate: (answer) => {
+      return validateAlphaInput(answer);
+    },
+    when: function (answers) {
+      return ["D5", "D6"].indexOf(answers.action) >= 0;
+    },
+  },
+  {
     type: "confirm",
     name: "confirm",
     message:
-      "Deleting a department will also delete all the other data related to that department...\n Do you wish to continue? ",
+      "Deleting a department will also delete all the roles and employees associated to that department...\n Do you wish to continue? ",
     when: function (answers) {
       return ["D7", "D8"].indexOf(answers.action) >= 0;
     },
@@ -334,56 +345,63 @@ function promptDeptQuestions() {
   //
   inquirer.prompt(deptQuestions).then((answers) => {
     //
-    switch (answers.action) {
+    const { action, confirm, ...values } = answers;
+    //
+    switch (action) {
       //
       case "D1":
         //
         // Create department
         //
-        new Department().insert({ deptName: answers.deptName });
+        new Department().create(values);
         break;
       case "D2":
         //
         // Retrieve all departments
         //
+        new Department().retrieve();
         break;
       case "D3":
-        //
-        // Retrieve a department by id
-        //
-        break;
       case "D4":
         //
-        // Retrieve a department by name
+        // Retrieve a department by id, name
         //
+        new Department().retrieve(values);
         break;
       case "D5":
         //
         // Update a department by id
         //
+        new Department().update(
+          {
+            name: answers.deptNewName,
+          },
+          {
+            id: answers.deptId,
+          }
+        );
         break;
       case "D6":
         //
         // Update a department by name
         //
+        new Department().update(
+          {
+            name: answers.deptNewName,
+          },
+          {
+            name: answers.deptName,
+          }
+        );
         break;
       case "D7":
-        //
-        // Delete a department by id
-        //
-        if (answers.confirm) {
-          //
-          new Department().delete({ id: answers.deptId });
-          //
-        }
-        break;
       case "D8":
         //
-        // Delete a department by name
+        // Delete a department by id, name
         //
         if (answers.confirm) {
           //
-          Department.prototype.delete({ name: answers.deptName });
+          new Department().delete(values);
           //
         }
         break;
@@ -406,6 +424,7 @@ const conn = mysql.createConnection({
   user: "root",
   password: "",
   database: "cms_db",
+  debug: true,
 });
 //
 // Rock & Roll
