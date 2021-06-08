@@ -4,9 +4,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 //
-const { Department } = require("./lib/Department");
-//const { Role } = require("./lib/Role");
-//const { Employee } = require("./lib/Employee");
+const { Database } = require("./lib/Database");
 //
 // Set the connection to the MySql database
 //
@@ -118,12 +116,12 @@ const roleQuestions = [
     name: "action",
     message: "--- Manage Roles ---",
     choices: [
-      { value: "R1", name: "Create a Role" },
-      { value: "R2", name: "Retrieve All Roles" },
-      { value: "R3", name: "Retrieve A Role By Id" },
-      { value: "R4", name: "Retrieve A Role By Title" },
-      { value: "R5", name: "Retrieve A Role By Salary" },
-      { value: "R6", name: "Retrieve A Role By Department Id" },
+      { value: "R1", name: "Add Role" },
+      { value: "R2", name: "View All Roles" },
+      { value: "R3", name: "View a Role By Id" },
+      { value: "R4", name: "View a Role By Title" },
+      { value: "R5", name: "View a Role By Salary" },
+      { value: "R6", name: "View a Role By Department Id" },
       { value: "R7", name: "Update Role By Id" },
       { value: "R8", name: "Update Role By Title" },
       { value: "R9", name: "Update Role By Salary" },
@@ -137,7 +135,7 @@ const roleQuestions = [
   },
   {
     type: "input",
-    name: "roleId",
+    name: "id",
     message: "What's the role id? ",
     validate: (answer) => {
       return validateNumericInput(answer);
@@ -148,7 +146,7 @@ const roleQuestions = [
   },
   {
     type: "input",
-    name: "roleName",
+    name: "title",
     message: "What's the role title? ",
     validate: (answer) => {
       return validateAlphaInput(answer);
@@ -159,7 +157,18 @@ const roleQuestions = [
   },
   {
     type: "input",
-    name: "roleSalary",
+    name: "newTitle",
+    message: "What's the role new title? ",
+    validate: (answer) => {
+      return validateAlphaInput(answer);
+    },
+    when: function (answers) {
+      return ["R7", "R9"].indexOf(answers.action) >= 0;
+    },
+  },
+  {
+    type: "input",
+    name: "salary",
     message: "What's the role salary? ",
     validate: (answer) => {
       return validateNumericInput(answer);
@@ -170,7 +179,7 @@ const roleQuestions = [
   },
   {
     type: "input",
-    name: "roleDeptId",
+    name: "dept_id",
     message: "What's the department id? ",
     validate: (answer) => {
       return validateNumericInput(answer);
@@ -286,7 +295,7 @@ function promptStartQuestions() {
           throw err;
           return;
         }
-        Department.prototype.conn = conn;
+        Database.prototype.conn = conn;
         promptMenuQuestions();
       });
     }
@@ -296,7 +305,7 @@ function promptStartQuestions() {
 // Prompt for menu questions
 //
 function promptMenuQuestions() {
-  console.clear();
+  //console.clear();
   inquirer.prompt(menuQuestions).then((answers) => {
     switch (answers.action) {
       case "01":
@@ -330,19 +339,18 @@ function promptMenuQuestions() {
 // Prompt for department questions
 //
 function promptDeptQuestions() {
-  console.clear();
+  //console.clear();
   inquirer.prompt(deptQuestions).then((answers) => {
     //
     const { action, confirm, ...values } = answers;
-    const dept = new Department();
+    const db = new Database();
     //
     switch (action) {
       case "D1":
         //
-        // Create department
+        // Create record
         //
-        dept
-          .query("INSERT INTO departments SET ?", values)
+        db.query("INSERT INTO departments SET ?", values)
           .then((data) => {
             console.log(
               data.affectedRows
@@ -356,9 +364,9 @@ function promptDeptQuestions() {
         break;
       case "D2":
         //
-        // Retrieve all departments
+        // Retrieve all records
         //
-        dept.query("SELECT name, id FROM departments").then((data) => {
+        db.query("SELECT name, id FROM departments").then((data) => {
           //
           console.log("\n");
           console.table(data);
@@ -369,10 +377,9 @@ function promptDeptQuestions() {
       case "D3":
       case "D4":
         //
-        // Retrieve a department by id, name
+        // Retrieve a record by id, name
         //
-        dept
-          .query("SELECT name, id FROM departments WHERE ?", values)
+        db.query("SELECT name, id FROM departments WHERE ?", values)
           .then((data) => {
             console.log("\n");
             console.table(data);
@@ -384,17 +391,16 @@ function promptDeptQuestions() {
         break;
       case "D5":
         //
-        // Update a department by id
+        // Update a record by id
         //
-        dept
-          .query("UPDATE departments SET ? WHERE ?", [
-            {
-              name: answers.deptNewName,
-            },
-            {
-              id: answers.id,
-            },
-          ])
+        db.query("UPDATE departments SET ? WHERE ?", [
+          {
+            name: answers.deptNewName,
+          },
+          {
+            id: answers.id,
+          },
+        ])
           .then((data) => {
             console.log(
               data.affectedRows
@@ -408,18 +414,17 @@ function promptDeptQuestions() {
         break;
       case "D6":
         //
-        // Update a department by name
+        // Update a record by name
         //
         console.log(answers);
-        dept
-          .query("UPDATE departments SET ? WHERE ?", [
-            {
-              name: answers.deptNewName,
-            },
-            {
-              name: answers.name,
-            },
-          ])
+        db.query("UPDATE departments SET ? WHERE ?", [
+          {
+            name: answers.deptNewName,
+          },
+          {
+            name: answers.name,
+          },
+        ])
           .then((data) => {
             console.log(
               data.affectedRows
@@ -434,15 +439,147 @@ function promptDeptQuestions() {
       case "D7":
       case "D8":
         //
-        // Delete a department by id, name
+        // Delete a record by id, name
         //
         if (answers.confirm) {
-          dept
-            .query("DELETE FROM departments WHERE ?", values)
+          db.query("DELETE FROM departments WHERE ?", values)
             .then((data) => {
               console.log(
                 data.affectedRows
                   ? "Department deleted successfully!"
+                  : `No records deleted - ${data.message}`
+              );
+            })
+            .catch((err) => {
+              console.log(`Error: ${err}`);
+            });
+        }
+        break;
+      //
+    }
+    //
+    // Return to Main Menu
+    //
+    promptMenuQuestions();
+    //
+  });
+}
+//
+// Prompt for role questions
+//
+function promptRoleQuestions() {
+  //console.clear();
+  inquirer.prompt(roleQuestions).then((answers) => {
+    //
+    const { action, confirm, ...values } = answers;
+    const db = new Database();
+    //
+    switch (action) {
+      case "R1":
+        //
+        // Create record
+        //
+        db.query("INSERT INTO roles SET ?", values)
+          .then((data) => {
+            console.log(
+              data.affectedRows
+                ? "Record created successfully!"
+                : `No records created - ${data.message}`
+            );
+          })
+          .catch((err) => {
+            console.log(`Error: ${err}`);
+          });
+        break;
+      case "R2":
+        //
+        // Retrieve all records
+        //
+        db.query("SELECT title, id, salary, dept_id FROM roles").then(
+          (data) => {
+            //
+            console.log("\n");
+            console.table(data);
+            console.log("Press up or down arrow keys to continue...\n\n");
+            //
+          }
+        );
+        break;
+      case "R3":
+      case "R4":
+      case "R5":
+      case "R6":
+        //
+        // Retrieve a record by title, id, salary, dept_id
+        //
+        db.query("SELECT title, id, salary, dept_id FROM roles WHERE ?", values)
+          .then((data) => {
+            console.log("\n");
+            console.table(data);
+            console.log("Press up or down arrow keys to continue...\n\n");
+          })
+          .catch((err) => {
+            console.log(`Error: ${err}`);
+          });
+        break;
+      case "R7":
+        //
+        // Update a record by id
+        //
+        db.query("UPDATE roles SET ? WHERE ?", [
+          {
+            name: answers.newTitle,
+          },
+          {
+            id: answers.id,
+          },
+        ])
+          .then((data) => {
+            console.log(
+              data.affectedRows
+                ? "Role updated successfully!"
+                : `No records updated - ${data.message}`
+            );
+          })
+          .catch((err) => {
+            console.log(`Error: ${err}`);
+          });
+        break;
+      case "R8":
+        //
+        // Update a record by name
+        //
+        console.log(answers);
+        db.query("UPDATE roles SET ? WHERE ?", [
+          {
+            name: answers.newTitle,
+          },
+          {
+            name: answers.title,
+          },
+        ])
+          .then((data) => {
+            console.log(
+              data.affectedRows
+                ? "Department updated successfully!"
+                : `No records updated - ${data.message}`
+            );
+          })
+          .catch((err) => {
+            console.log(`Error: ${err}`);
+          });
+        break;
+      case "R11":
+      case "R12":
+        //
+        // Delete a record by id, title
+        //
+        if (answers.confirm) {
+          db.query("DELETE FROM roles WHERE ?", values)
+            .then((data) => {
+              console.log(
+                data.affectedRows
+                  ? "Record deleted successfully!"
                   : `No records deleted - ${data.message}`
               );
             })
