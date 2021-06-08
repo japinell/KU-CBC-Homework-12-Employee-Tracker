@@ -5,19 +5,8 @@ const inquirer = require("inquirer");
 const mysql = require("mysql");
 //
 const { Department } = require("./lib/Department");
-//const { Role } = require("./lib/Role");
-//const { Employee } = require("./lib/Employee");
-//
-// Set the connection to the MySql database
-//
-const config = {
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "",
-  database: "cms_db",
-  debug: true,
-};
+const { Role } = require("./lib/Role");
+const { Employee } = require("./lib/Employee");
 //
 // Start questions
 //
@@ -26,7 +15,7 @@ const startQuestions = [
     type: "confirm",
     name: "continue",
     message:
-      "\n---------- EMPLOYEE MANAGEMENT SYSTEM ----------\nThe following questions will be used to generate the Employee Management System.\nDo you wish to continue?",
+      "\n\n---------- EMPLOYEE MANAGEMENT SYSTEM ----------\n\nThe following questions will be used to generate the Employee Management Database.\nDo you wish to continue?",
   },
 ];
 //
@@ -56,15 +45,16 @@ const deptQuestions = [
     message: "--- Manage Departments ---",
     choices: [
       { value: "D1", name: "Add Department" },
-      { value: "D2", name: "View All Departments" },
+      { value: "D2", name: "Vie All Departments" },
       { value: "D3", name: "View a Department By Id" },
       { value: "D4", name: "View a Department By Name" },
       { value: "D5", name: "Update a Department By Id" },
       { value: "D6", name: "Update a Department By Name" },
       { value: "D7", name: "Delete a Department By Id" },
       { value: "D8", name: "Delete a Department By Name" },
+      { value: "D99", name: "Return to Main Menu" },
     ],
-    default: "D2",
+    default: "D1",
   },
   {
     type: "input",
@@ -296,7 +286,6 @@ function promptStartQuestions() {
 // Prompt for menu questions
 //
 function promptMenuQuestions() {
-  console.clear();
   inquirer.prompt(menuQuestions).then((answers) => {
     switch (answers.action) {
       case "01":
@@ -330,106 +319,54 @@ function promptMenuQuestions() {
 // Prompt for department questions
 //
 function promptDeptQuestions() {
-  console.clear();
   inquirer.prompt(deptQuestions).then((answers) => {
-    //
     const { action, confirm, ...values } = answers;
     const dept = new Department();
-    //
     switch (action) {
       case "D1":
         //
         // Create department
         //
-        dept
-          .query("INSERT INTO departments SET ?", values)
-          .then((data) => {
-            console.log(
-              data.affectedRows
-                ? "Department created successfully!"
-                : `No records created - ${data.message}`
-            );
-          })
-          .catch((err) => {
-            console.log(`Error: ${err}`);
-          });
+        dept.insert(values);
         break;
       case "D2":
         //
         // Retrieve all departments
         //
-        dept.query("SELECT name, id FROM departments").then((data) => {
-          //
-          console.log("\n");
-          console.table(data);
-          console.log("Press up or down arrow keys to continue...\n\n");
-          //
-        });
+        dept.select(true);
         break;
       case "D3":
       case "D4":
         //
         // Retrieve a department by id, name
         //
-        dept
-          .query("SELECT name, id FROM departments WHERE ?", values)
-          .then((data) => {
-            console.log("\n");
-            console.table(data);
-            console.log("Press up or down arrow keys to continue...\n\n");
-          })
-          .catch((err) => {
-            console.log(`Error: ${err}`);
-          });
+        dept.select(values);
         break;
       case "D5":
         //
         // Update a department by id
         //
-        dept
-          .query("UPDATE departments SET ? WHERE ?", [
-            {
-              name: answers.deptNewName,
-            },
-            {
-              id: answers.id,
-            },
-          ])
-          .then((data) => {
-            console.log(
-              data.affectedRows
-                ? "Department updated successfully!"
-                : `No records updated - ${data.message}`
-            );
-          })
-          .catch((err) => {
-            console.log(`Error: ${err}`);
-          });
+        dept.update(
+          {
+            name: answers.deptNewName,
+          },
+          {
+            id: answers.deptId,
+          }
+        );
         break;
       case "D6":
         //
         // Update a department by name
         //
-        console.log(answers);
-        dept
-          .query("UPDATE departments SET ? WHERE ?", [
-            {
-              name: answers.deptNewName,
-            },
-            {
-              name: answers.name,
-            },
-          ])
-          .then((data) => {
-            console.log(
-              data.affectedRows
-                ? "Department updated successfully!"
-                : `No records updated - ${data.message}`
-            );
-          })
-          .catch((err) => {
-            console.log(`Error: ${err}`);
-          });
+        dept.update(
+          {
+            name: answers.deptNewName,
+          },
+          {
+            name: answers.deptName,
+          }
+        );
         break;
       case "D7":
       case "D8":
@@ -437,33 +374,28 @@ function promptDeptQuestions() {
         // Delete a department by id, name
         //
         if (answers.confirm) {
-          dept
-            .query("DELETE FROM departments WHERE ?", values)
-            .then((data) => {
-              console.log(
-                data.affectedRows
-                  ? "Department deleted successfully!"
-                  : `No records deleted - ${data.message}`
-              );
-            })
-            .catch((err) => {
-              console.log(`Error: ${err}`);
-            });
+          dept.delete(values);
         }
         break;
       //
+      // Exit to Main Menu
+      //
+      default:
+        promptMenuQuestions();
     }
-    //
-    // Return to Main Menu
-    //
-    promptMenuQuestions();
-    //
   });
 }
 //
 // Set the connection to the MySql server/database
 //
-const conn = mysql.createConnection(config);
+const conn = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "",
+  database: "cms_db",
+  debug: true,
+});
 //
 // Rock & Roll
 //
