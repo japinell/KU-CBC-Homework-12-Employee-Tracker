@@ -14,7 +14,7 @@ const config = {
   user: "root",
   password: "",
   database: "cms_db",
-  debug: true,
+  //   debug: true,
 };
 //
 // Start questions
