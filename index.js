@@ -32,7 +32,7 @@ const menuQuestions = [
       { value: "03", name: "Manage Employees" },
       { value: "99", name: "Exit the Application" },
     ],
-    default: "01",
+    default: "03",
   },
 ];
 //

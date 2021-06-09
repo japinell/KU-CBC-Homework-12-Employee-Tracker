@@ -24,7 +24,7 @@ So that I can organize and plan my business
 
 ## Installation
 
-This application requires **Node.js** JavaScript Runtime, **Express.js** and **MySQL** packages. Basic knowledge of [Node.js](https://nodejs.org/en/), [Inquirer.js](https://www.npmjs.com/package/inquirer), and [MySQL.js](https://www.npmjs.com/package/mysql) is recommended to run the application. To faciliate the installation and run of the application, a _package.json_ file is provided with the project along with basic instructions of how to install the required libraries:
+This application requires **Node.js** JavaScript Runtime, **Inquirer.js** and **MySQL** packages. Basic knowledge of [Node.js](https://nodejs.org/en/), [Inquirer.js](https://www.npmjs.com/package/inquirer), and [MySQL.js](https://www.npmjs.com/package/mysql) is recommended to run the application. To faciliate the installation and run of the application, a _package.json_ file is provided with the project along with basic instructions of how to install the required libraries:
 
 ```bash
 npm i inquirer
@@ -43,7 +43,7 @@ node index.js
 
 The application shows the user a menu with options to manage departments, roles, and employees. After selecting an action to perform, for instance, managing employees, the user is presented with another meny to view, insert, update, and delete employees using a series of predefined options.
 
-A video showing the application functionality is presented here:
+A video showing the application functionality is provided [here](https://drive.google.com/file/d/1o3UEQjAwcmY0DVpynNRnIe65wxK-pugZ/view).
 
 If you want to cancel the application execution while running it locally, press the following command in Microsoft Windows, or equivalent commands in Mac OS and Linux:
 
