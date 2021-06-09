@@ -31,6 +31,13 @@ npm i inquirer
 npm i mysql
 ```
 
+Additionally, the following files are provided to create the database with predefined records (files can be found in the _db_ folder):
+
+```bash
+schema.sql
+seed.sql
+```
+
 The application features the use of **MySQL** package to connect to a MySQL database and perform queries, **Inquirer** to interact with the user via the command-line, and **console.table** to print MySQL rows to the console.
 
 ## Usage
