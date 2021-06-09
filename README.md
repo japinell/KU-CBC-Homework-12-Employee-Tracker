@@ -1,52 +1,14 @@
-# Unit 12 MySQL Homework: Employee Tracker
+# 12 MySQL: Employee Tracker
 
-Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this homework assignment, your challenge is to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
+## Description
 
-## Instructions
-
-Design the following database schema containing three tables:
-
-![Database Schema](assets/schema.png)
-
-- **department**:
-
-  - **id** - INT PRIMARY KEY
-  - **name** - VARCHAR(30) to hold department name
-
-- **role**:
-
-  - **id** - INT PRIMARY KEY
-  - **title** - VARCHAR(30) to hold role title
-  - **salary** - DECIMAL to hold role salary
-  - **department_id** - INT to hold reference to department role belongs to
-
-- **employee**:
-
-  - **id** - INT PRIMARY KEY
-  - **first_name** - VARCHAR(30) to hold employee first name
-  - **last_name** - VARCHAR(30) to hold employee last name
-  - **role_id** - INT to hold reference to role employee has
-  - **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
-
-Build a command-line application that at a minimum allows the user to:
+The purpose of this application is to architect and build a solution for managing a company's employees using **Node**, **Inquirer**, and **MySQL**. The application should make it easy for end users to view and interact with information stored in the database. At a minimum, it should allow to:
 
 - Add departments, roles, employees
-
 - View departments, roles, employees
-
 - Update employee roles
 
-Bonus points if you're able to:
-
-- Update employee managers
-
-- View employees by manager
-
-- Delete departments, roles, and employees
-
-- View the total utilized budget of a department -- ie the combined salaries of all employees in that department
-
-We can frame this challenge as follows:
+## User Story
 
 ```
 As a business owner
@@ -54,86 +16,59 @@ I want to be able to view and manage the departments, roles, and employees in my
 So that I can organize and plan my business
 ```
 
-How do you deliver this? Here are some guidelines:
+## Table of Contents
 
-- Use the [MySQL](https://www.npmjs.com/package/mysql) NPM package to connect to your MySQL database and perform queries.
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
 
-- Use [InquirerJs](https://www.npmjs.com/package/inquirer/v/0.2.3) NPM package to interact with the user via the command-line.
+## Installation
 
-- Use [console.table](https://www.npmjs.com/package/console.table) to print MySQL rows to the console. There is a built-in version of `console.table`, but the NPM package formats the data a little better for our purposes.
+This application requires **Node.js** JavaScript Runtime, **Express.js** and **MySQL** packages. Basic knowledge of [Node.js](https://nodejs.org/en/), [Inquirer.js](https://www.npmjs.com/package/inquirer), and [MySQL.js](https://www.npmjs.com/package/mysql) is recommended to run the application. To faciliate the installation and run of the application, a _package.json_ file is provided with the project along with basic instructions of how to install the required libraries:
 
-- You may wish to have a separate file containing functions for performing specific SQL queries you'll need to use. Could a constructor function or a class be helpful for organizing these?
+```bash
+npm i inquirer
+npm i mysql
+```
 
-- You will need to perform a variety of SQL JOINS to complete this assignment, and it's recommended you review the week's activities if you need a refresher on this.
+The application features the use of **MySQL** package to connect to a MySQL database and perform queries, **Inquirer** to interact with the user via the command-line, and **console.table** to print MySQL rows to the console.
 
-![Employee Tracker](Assets/employee-tracker.gif)
+## Usage
 
-### Hints
+The application is invoked by using the following command:
 
-- You may wish to include a `seed.sql` file to pre-populate your database. This will make development of individual features much easier.
+```bash
+node index.js
+```
 
-- Focus on getting the basic functionality completed before working on more advanced features.
+The application shows the user a menu with options to manage departments, roles, and employees. After selecting an action to perform, for instance, managing employees, the user is presented with another meny to view, insert, update, and delete employees using a series of predefined options.
 
-- Review the week's activities for a refresher on MySQL.
+A video showing the application functionality is presented here:
 
-- Check out [SQL Bolt](https://sqlbolt.com/) for some extra MySQL help.
+If you want to cancel the application execution while running it locally, press the following command in Microsoft Windows, or equivalent commands in Mac OS and Linux:
 
-## Minimum Requirements
+```bash
+CTRL + C
+```
 
-- Functional application.
+## License
 
-- GitHub repository with a unique name and a README describing the project.
+This project is licensed under The MIT License. Refer to https://opensource.org/licenses/MIT for more information of what you can and cannot do with this project. See contact information below if you have questions, comments, or suggestions for the project.
 
-- The command-line application should allow users to:
+## Contributing Guidelines
 
-  - Add departments, roles, employees
+Want to contribute to this project? You may clone or fork the project in GitHub. Note the licesing information referred in this file.
 
-  - View departments, roles, employees
+## Contact Information
 
-  - Update employee roles
+For questions, comments, or suggestions, please contact me by E-Mail:
 
-## Bonus
+japinell@yahoo.com
 
-- The command-line application should allow users to:
+Check out my other **cool** projects in GitHub - https://github.com/japinell
 
-  - Update employee managers
+## License
 
-  - View employees by manager
+This application is licensed under the following license:
 
-  - Delete departments, roles, and employees
-
-  - View the total utilized budget of a department -- ie the combined salaries of all employees in that department
-
-## Commit Early and Often
-
-One of the most important skills to master as a web developer is version control. Building the habit of committing via Git is important for two reasons:
-
-- Your commit history is a signal to employers that you are actively working on projects and learning new skills.
-
-- Your commit history allows you to revert your codebase in the event that you need to return to a previous state.
-
-Follow these guidelines for committing:
-
-- Make single-purpose commits for related changes to ensure a clean, manageable history. If you are fixing two issues, make two commits.
-
-- Write descriptive, meaningful commit messages so that you and anyone else looking at your repository can easily understand its history.
-
-- Don't commit half-done work, for the sake of your collaborators (and your future self!).
-
-- Test your application before you commit to ensure functionality at every step in the development process.
-
-We would like you to have well over 200 commits by graduation, so commit early and often!
-
-**Important**: You will be committing a file that contains your database credentials. Make sure your MySQL password is not used for any other personal accounts, because it will be visible on GitHub. In upcoming lessons, you will learn how to better secure this password, or you can start researching npm packages now that could help you.
-
-## Submission on BCS
-
-You are required to submit the following:
-
-- The URL of the GitHub repository
-
-- A video demonstrating the entirety of the app's functionality
-
----
-
-© 2021 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)(https://opensource.org/licenses/MIT)
