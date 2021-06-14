@@ -38,6 +38,8 @@ schema.sql
 seed.sql
 ```
 
+Watch a video demonstrating how to create and seed the database with sample data [here](https://drive.google.com/file/d/1V4JamtXEDNW5mMYjJceyYUMv9qEopBeq/view).
+
 The application features the use of **MySQL** package to connect to a MySQL database and perform queries, **Inquirer** to interact with the user via the command-line, and **console.table** to print MySQL rows to the console.
 
 ## Usage
@@ -48,9 +50,17 @@ The application is invoked by using the following command:
 node index.js
 ```
 
+A video demonstrating how to run the application is provided [here](https://drive.google.com/file/d/1dBTxvoGaN08_HVWo0yIS25ipMxUuH5tc/view).
+
 The application shows the user a menu with options to manage departments, roles, and employees. After selecting an action to perform, for instance, managing employees, the user is presented with another meny to view, insert, update, and delete employees using a series of predefined options.
 
-A video showing the application functionality is provided [here](https://drive.google.com/file/d/1o3UEQjAwcmY0DVpynNRnIe65wxK-pugZ/view).
+Videos demonstrating the application functionality are provided below:
+
+- Manage departments (watch [here](https://drive.google.com/file/d/1N7lv9zKxndbqw7tl-d3kQcWjpGew1sZ4/view))
+
+- Manage roles (watch [here](https://drive.google.com/file/d/16ImLAI43WQf5xy6W6q4OVq_9HdGWPJXW/view)
+
+- Manage employees (watch [here](https://drive.google.com/file/d/1qwCLKWAdyk3OCZO9t46J9M5LG-mAJ14v/view)
 
 If you want to cancel the application execution while running it locally, press the following command in Microsoft Windows, or equivalent commands in Mac OS and Linux:
 
