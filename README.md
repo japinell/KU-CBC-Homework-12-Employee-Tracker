@@ -58,9 +58,9 @@ Videos demonstrating the application functionality are provided below:
 
 - Manage departments (watch [here](https://drive.google.com/file/d/1N7lv9zKxndbqw7tl-d3kQcWjpGew1sZ4/view))
 
-- Manage roles (watch [here](https://drive.google.com/file/d/16ImLAI43WQf5xy6W6q4OVq_9HdGWPJXW/view)
+- Manage roles (watch [here](https://drive.google.com/file/d/16ImLAI43WQf5xy6W6q4OVq_9HdGWPJXW/view))
 
-- Manage employees (watch [here](https://drive.google.com/file/d/1qwCLKWAdyk3OCZO9t46J9M5LG-mAJ14v/view)
+- Manage employees (watch [here](https://drive.google.com/file/d/1qwCLKWAdyk3OCZO9t46J9M5LG-mAJ14v/view))
 
 If you want to cancel the application execution while running it locally, press the following command in Microsoft Windows, or equivalent commands in Mac OS and Linux:
 
